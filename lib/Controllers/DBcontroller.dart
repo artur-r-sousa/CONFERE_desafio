@@ -1,7 +1,10 @@
+import 'package:loja_tres_pontos/Controllers/JsonController.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
+import 'package:loja_tres_pontos/Controllers/JsonController.dart';
+
 
 
 class DBController{
@@ -32,23 +35,26 @@ class DBController{
   }
 
   // ignore: missing_return
-  Future _onCreate(Database db, int version) {
+  Future _onCreate(Database db, int version){
     db.execute(
       ''' 
       CREATE TABLE $_tableName(_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
        name TEXT NOT NULL,
-       style TEXT NOT NULL,
+       style TEXT,
        code_color TEXT,
        color_slug TEXT,
        color TEXT,
        on_sale TEXT,
        regular_price REAL NOT NULL,
-       actual_price REAL NOT NULL,
+       actual_price REAL,
        discount_percentage REAL,
-       installments TEXT,
-       image BLOB)
+       installments INTEGER,
+       image TEXT NOT NULL)
       '''
-    );
+    ).then((_)=>{
+      JsonController().sendProductToDB()
+    });
+
   }
 
   Future<int> insert(Map<String, dynamic> row) async{
@@ -60,6 +66,12 @@ class DBController{
     Database db = await instance.database;
     return await db.query(_tableName);
   }
+
+  Future<List<Map<String, dynamic>>> getOne(int id) async {
+    Database db = await instance.database;
+    return await db.query(_tableName, where: '_id = ?', whereArgs: [id]);
+  }
+
 
   Future update(Map<String, dynamic> row) async{
     Database db = await instance.database;

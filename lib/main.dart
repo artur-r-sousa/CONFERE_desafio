@@ -1,10 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:loja_tres_pontos/Db/controller.dart';
+import 'package:loja_tres_pontos/Controllers/DBcontroller.dart';
 
-void main() => runApp(MaterialApp(home: MyApp(),));
+
+
+
+void main() async {
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: _MyApp(),
+    );
+  }
+}
+
+class _MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<_MyApp> {
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,28 +37,14 @@ class MyApp extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             TextButton(onPressed: () async {
-              int i = await DBController.instance.insert({
-                'name': 'VESTIDO TRANSPASSE BOW',
-                'style': "20002605",
-                'regular_price': 199.90,
-                'actual_price': 199.9
-              });
 
-              print('id inserted $i');
-            }, child: Text('insert')),
-            TextButton(onPressed: () async {
               List<Map<String, dynamic>> queryRows = await DBController.instance.queryAll();
               print(queryRows);
+              List<Map<String, dynamic>> queryRow = await DBController.instance.getOne(1);
+              print(queryRow);
 
-            }, child: Text('query')),
-            TextButton(onPressed: () async {
-              int updateId = await DBController.instance.update({'_id': 1, 'name': 'nba jersey'});
-              print(updateId);
-            }, child: Text('update')),
-            TextButton(onPressed: () async {
-              int deletedRows = await DBController.instance.delete(1);
-              print('rows affected : $deletedRows');
-            }, child: Text('delete')),
+            }, child: Text('queryAll'))
+
           ],
         ),
       ),
