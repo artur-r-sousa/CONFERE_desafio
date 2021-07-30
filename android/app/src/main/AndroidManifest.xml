@@ -1,5 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.loja_tres_pontos">
+    <!-- Permissions options for the 'storage' group-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="loja_tres_pontos"
         android:icon="@mipmap/ic_launcher">

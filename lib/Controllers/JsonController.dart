@@ -1,4 +1,4 @@
-import 'package:loja_tres_pontos/Controllers/DBcontroller.dart';
+import 'package:loja_tres_pontos/Controllers/DBController.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 
@@ -8,7 +8,7 @@ class JsonController {
     return rootBundle.loadString('assets/info.json');
   }
 
-  sendProductToDB() async {
+  sendProductsToDB() async {
     var data = json.decode(await loadJson());
     for(int i = 0; i< data['products'].length; i++) {
       DBController.instance.insert({
@@ -19,6 +19,4 @@ class JsonController {
     }
 
   }
-
-
 }

@@ -16,12 +16,11 @@ class Product{
 
   Product({this.name, this.imgPath, this.regPrice});
 
-  factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
-        name: json['name'] as String,
-        imgPath: json['image'] as String,
-        regPrice: json['regular_price'] as double
-    );
-  }
+  factory Product.fromMap(Map<dynamic, dynamic> data) => new Product(
+    name: data['name'],
+    imgPath: data['image'],
+    regPrice: double.parse(data['regular_price'].substring(3).replaceAll(',', '.'))
+
+  );
 
 }

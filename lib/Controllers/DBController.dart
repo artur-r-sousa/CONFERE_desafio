@@ -3,9 +3,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-import 'package:loja_tres_pontos/Controllers/JsonController.dart';
-
-
+import 'package:loja_tres_pontos/models/Product.dart';
 
 class DBController{
 
@@ -15,11 +13,9 @@ class DBController{
 
   DBController._privateConstructor();
   static final DBController instance = DBController._privateConstructor();
-
   static Database _database;
 
   Future<Database> get database async {
-    //check if the db is already initialized
     if(_database != null) return _database;
     _database = await _initDB();
     return _database;
@@ -34,10 +30,9 @@ class DBController{
     );
   }
 
-  // ignore: missing_return
-  Future _onCreate(Database db, int version){
-    db.execute(
-      ''' 
+  _onCreate(Database db, int version) async {
+      await db.execute(
+          ''' 
       CREATE TABLE $_tableName(_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
        name TEXT NOT NULL,
        style TEXT,
@@ -51,10 +46,10 @@ class DBController{
        installments INTEGER,
        image TEXT NOT NULL)
       '''
-    ).then((_)=>{
-      JsonController().sendProductToDB()
-    });
-
+      );
+      await db.transaction((txn) async {
+        JsonController().sendProductsToDB();
+      });
   }
 
   Future<int> insert(Map<String, dynamic> row) async{
@@ -62,16 +57,20 @@ class DBController{
     return await db.insert(_tableName, row);
   }
 
-  Future<List<Map<String, dynamic>>> queryAll() async {
+  Future<List<Product>> queryAll() async {
     Database db = await instance.database;
-    return await db.query(_tableName);
+    var res =  await db.query(_tableName);
+
+    List<Product> products = res.isNotEmpty ? res.map((p) => Product.fromMap(p)).
+      toList(): [];
+
+    return products;
   }
 
   Future<List<Map<String, dynamic>>> getOne(int id) async {
     Database db = await instance.database;
     return await db.query(_tableName, where: '_id = ?', whereArgs: [id]);
   }
-
 
   Future update(Map<String, dynamic> row) async{
     Database db = await instance.database;
@@ -83,6 +82,4 @@ class DBController{
     Database db = await instance.database;
     return await db.delete(_tableName, where: '_id = ?', whereArgs: [id]);
   }
-
-
 }
