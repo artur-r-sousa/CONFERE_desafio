@@ -19,4 +19,8 @@ class DeleteProductEvent extends ProductEvent {
   DeleteProductEvent({this.id});
 }
 
+class UpdateProductEvent extends ProductEvent {
+  Product product;
+  UpdateProductEvent({this.product});
+}
 

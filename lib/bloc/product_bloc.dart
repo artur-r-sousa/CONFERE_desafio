@@ -34,6 +34,30 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       } catch (e) {
         print(e);
       }
+    } else if (event is UpdateProductEvent){
+      try{
+        print("here");
+        Map<String, dynamic> row = {
+          '_id': event.product.id,
+          'name': event.product.name,
+          'style': event.product.style,
+          'code_color': event.product.codeColor,
+          'color_slug': event.product.colorSlug,
+          'color': event.product.color,
+          'on_sale': event.product.onSale,
+          'regular_price': event.product.regPrice,
+          'actual_price': event.product.actPrice,
+          'discount_percentage': event.product.discPercentage,
+          'installments': event.product.installments,
+          'image': event.product.imgPath
+        };
+        int update = await DBController.instance.update(row);
+        yield ProductUpdated(update: update);
+        await Future.delayed(const Duration(seconds: 2));
+        yield ProductLoaded();
+      } catch (e) {
+        print(e);
+      }
     }
   }
 }

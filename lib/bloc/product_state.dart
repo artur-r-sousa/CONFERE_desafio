@@ -38,6 +38,11 @@ class ProductDeleted extends ProductState {
   ProductDeleted({this.prodId});
 }
 
+class ProductUpdated extends ProductState {
+  int update;
+  ProductUpdated({this.update});
+}
+
 class ProductError extends ProductState {
   final String message;
   ProductError(this.message);
