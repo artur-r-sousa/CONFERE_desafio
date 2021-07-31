@@ -39,7 +39,7 @@ class DBController{
        code_color TEXT,
        color_slug TEXT,
        color TEXT,
-       on_sale TEXT,
+       on_sale INTEGER,
        regular_price REAL NOT NULL,
        actual_price REAL,
        discount_percentage REAL,

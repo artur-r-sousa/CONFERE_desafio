@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loja_tres_pontos/bloc/product_bloc.dart';
+import 'package:loja_tres_pontos/components/screens/DetailScreen.dart';
 import 'package:loja_tres_pontos/models/Product.dart';
 
 class ProductComponent extends StatelessWidget {
@@ -46,7 +48,14 @@ class ProductComponent extends StatelessWidget {
             children:
             List.generate(products.length, (index) {
               return InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DetailScreen(product: products[index]),
+                    ),
+                  );
+                },
                 child: Container(
                   decoration: BoxDecoration(
                       color: Colors.white,
@@ -75,6 +84,7 @@ class ProductComponent extends StatelessWidget {
                               height: 250,
                               decoration: BoxDecoration(
                                 image: new DecorationImage(
+
                                     fit: BoxFit.fitHeight,
                                     image: NetworkImage(products[index].imgPath)),
                                 borderRadius: BorderRadius.all(
@@ -88,11 +98,13 @@ class ProductComponent extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(products[index].name),
+                                Text(products[index].name, style: TextStyle(color: Colors.cyan, fontWeight: FontWeight.bold),),
                                 SizedBox(height: 10,),
-                                Text(products[index].regPrice.toString()),
+                                Text('R\$ ${products[index].regPrice.toStringAsFixed(2)}', style: TextStyle(color: Colors.cyan, fontWeight: FontWeight.bold)),
                                 SizedBox(height: 10,),
-                                Text(products[index].actPrice.toString())
+                                if(products[index].actPrice != null && products[index].actPrice != products[index].regPrice)
+                                  Text('PROMOÇÃO!! R\$ ${products[index].actPrice.toStringAsFixed(2)}', style: TextStyle( fontWeight: FontWeight.bold),)
+
                               ],
                             ),
                           )
@@ -106,7 +118,7 @@ class ProductComponent extends StatelessWidget {
                 crossAxisCount: 2,
                 mainAxisSpacing: 20.0,
                 crossAxisSpacing: 30.0,
-                childAspectRatio: 0.8
+                childAspectRatio: 0.45
             ),
           );
         }

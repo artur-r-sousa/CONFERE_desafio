@@ -16,18 +16,24 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   Stream<ProductState> mapEventToState(
     ProductEvent event,
   ) async* {
-    if(event is GetProductEvent) {
-      try{
+    if (event is GetProductEvent) {
+      try {
         yield ProductLoading();
         await Future.delayed(const Duration(seconds: 2));
-
         final data = await DBController.instance.queryAll();
         yield ProductLoaded(products: data);
-
-      }catch (e){
+      } catch (e) {
         print(e);
-        }
+      }
+    } else if (event is DeleteProductEvent) {
+      try {
+        int prodId = await DBController.instance.delete(event.id);
+        yield ProductDeleted(prodId: prodId);
+        await Future.delayed(const Duration(seconds: 2));
+        yield ProductLoaded();
+      } catch (e) {
+        print(e);
       }
     }
   }
-
+}

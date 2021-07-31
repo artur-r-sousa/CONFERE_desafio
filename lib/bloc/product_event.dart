@@ -13,3 +13,10 @@ class GetProductEvent extends ProductEvent{
   String name;
   GetProductEvent({this.name});
 }
+
+class DeleteProductEvent extends ProductEvent {
+  int id;
+  DeleteProductEvent({this.id});
+}
+
+
