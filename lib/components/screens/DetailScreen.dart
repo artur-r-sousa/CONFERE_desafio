@@ -140,54 +140,103 @@ class DetailScreen extends StatelessWidget {
                             mandatoryField: true,
                             keyboard: TextInputType.number,
                           ),
-                          TextFormField(
-                            validator:(value) {
-                              if(value.isNotEmpty && (value == 'yes' || value == 'no')) {
-                                return null;
-                              } else {
-                                return 'Please only enter yes or no';
-                              }
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'On Sale',
-                              labelStyle: TextStyle(color: Colors.white),
-                              border: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              errorBorder: InputBorder.none,
-                              disabledBorder: InputBorder.none,
-                            ),
-                            controller: saleController,
-                            keyboardType: TextInputType.text,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5.0, left: 12.0, right: 12.0),
+                            child: TextFormField(
+                              validator:(value) {
+                                if(value.isNotEmpty && (value == 'yes' || value == 'no')) {
+                                  return null;
+                                } else {
+                                  return 'Please only enter yes or no';
+                                }
+                              },
+                              decoration: InputDecoration(
+                                labelText: 'On Sale',
+                                labelStyle: TextStyle(color: Colors.white),
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                errorBorder: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+                              ),
+                              controller: saleController,
+                              keyboardType: TextInputType.text,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
 
-                           TextButton(onPressed: (){
-                            if(!_formKey.currentState.validate()) {
-                              return;
-                            }
-                            product.name = nameController.text;
-                            product.style = styleController.text;
-                            product.codeColor = codeColorController.text;
-                            product.colorSlug = colorSlugController.text;
-                            product.color = colorController.text;
-                            product.installments = int.parse(instController.text);
-                            product.regPrice = double.parse(regPriceController.text);
-                            product.actPrice = double.parse(actPriceController.text);
-                            product.imgPath = product.imgPath;
-                            product.onSale = saleController.text == 'yes' ? true : false;
-                            product.discPercentage = double.parse(discountController.text);
-                            ProductBloc()..add(UpdateProductEvent(product: product));
-                            final snackBar = SnackBar(content: const Text('Produto alterado com sucesso'));
-                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                            Navigator.pushReplacement(context, MaterialPageRoute(
-                              builder: (context) => HomeView(),
-                            ),
-                            );
-                          }, child: Text('Criar'))
+                           Center(
+                             child: Row(
+                               children: [
+                                 TextButton(onPressed: (){
+                                  if(!_formKey.currentState.validate()) {
+                                    return;
+                                  }
+                                  product.name = nameController.text;
+                                  product.style = styleController.text;
+                                  product.codeColor = codeColorController.text;
+                                  product.colorSlug = colorSlugController.text;
+                                  product.color = colorController.text;
+                                  product.installments = int.parse(instController.text);
+                                  product.regPrice = double.parse(regPriceController.text);
+                                  product.actPrice = double.parse(actPriceController.text);
+                                  product.imgPath = product.imgPath;
+                                  product.onSale = saleController.text == 'yes' ? true : false;
+                                  product.discPercentage = double.parse(discountController.text);
+                                  ProductBloc()..add(UpdateProductEvent(product: product));
+                                  final snackBar = SnackBar(content: const Text('Produto alterado com sucesso'));
+                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                  Navigator.pushReplacement(context, MaterialPageRoute(
+                                    builder: (context) => HomeView(),
+                                  ),
+                                  );
+                                    }, child: Text('Alterar')),
+                                 TextButton(onPressed: () {
+                                   showDialog(
+                                     context: context,
+                                     builder: (BuildContext context) {
+                                       return AlertDialog(
+                                         title: new Text("Confirmação"),
+                                         content: new Text(
+                                             "Deseja remover o produto: ${nameController.text}"),
+                                         actions: <Widget>[
+                                           // define os botões na base do dialogo
+                                           TextButton(
+                                             child: Text("Fechar"),
+                                             onPressed: () {
+                                               Navigator.of(context).pop();
+                                             },
+                                           ),
+                                           TextButton(
+                                             child: Text('Confirmar'),
+                                             onPressed: () {
+                                               ProductBloc()
+                                                 ..add(DeleteProductEvent(id: product.id));
+                                               final snackBar = SnackBar(
+                                                   content: const Text(
+                                                       'Produto removido com sucesso'));
+                                               ScaffoldMessenger.of(context)
+                                                   .showSnackBar(snackBar);
+                                               Navigator.pushReplacement(
+                                                 context,
+                                                 MaterialPageRoute(
+                                                   builder: (context) => HomeView(),
+                                                 ),
+                                               );
+                                             },
+                                           )
+                                         ],
+                                       );
+                                     }
+                                   );
+                                 }, child: (Text('Delete')))
+                               ],
+                             ),
+                           ),
+
                         ],
                       ),
                     ),
