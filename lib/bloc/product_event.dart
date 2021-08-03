@@ -14,6 +14,11 @@ class GetProductEvent extends ProductEvent{
   GetProductEvent({this.name});
 }
 
+class AddProductEvent extends ProductEvent {
+  Product product;
+  AddProductEvent({this.product});
+}
+
 class DeleteProductEvent extends ProductEvent {
   int id;
   DeleteProductEvent({this.id});

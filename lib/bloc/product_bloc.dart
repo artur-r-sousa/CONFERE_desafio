@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:loja_tres_pontos/Controllers/DBController.dart';
+import 'package:loja_tres_pontos/components/screens/AddProduct.dart';
 import 'package:loja_tres_pontos/models/Product.dart';
+
 
 part 'product_event.dart';
 part 'product_state.dart';
@@ -36,7 +38,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       }
     } else if (event is UpdateProductEvent){
       try{
-        print("here");
         Map<String, dynamic> row = {
           '_id': event.product.id,
           'name': event.product.name,
@@ -53,6 +54,29 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         };
         int update = await DBController.instance.update(row);
         yield ProductUpdated(update: update);
+        await Future.delayed(const Duration(seconds: 2));
+        yield ProductLoaded();
+      } catch (e) {
+        print(e);
+      }
+    }
+    else if (event is AddProductEvent) {
+      try{
+        Map<String, dynamic> row = {
+          'name': event.product.name,
+          'style': event.product.style,
+          'code_color': event.product.codeColor,
+          'color_slug': event.product.colorSlug,
+          'color': event.product.color,
+          'on_sale': AddProductState.switchTileValue,
+          'regular_price': event.product.regPrice,
+          'actual_price': event.product.actPrice,
+          'discount_percentage': event.product.discPercentage,
+          'installments': event.product.installments.toString(),
+          'image': event.product.imgPath
+        };
+        int addProd = await DBController.instance.insert(row);
+        yield ProductAdded(product: addProd);
         await Future.delayed(const Duration(seconds: 2));
         yield ProductLoaded();
       } catch (e) {

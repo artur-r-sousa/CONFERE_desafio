@@ -33,13 +33,18 @@ class ProductLoaded extends ProductState {
   int get hashCode => products.hashCode;
 }
 
+class ProductAdded extends ProductState {
+  final int product;
+  ProductAdded({this.product});
+}
+
 class ProductDeleted extends ProductState {
   final int prodId;
   ProductDeleted({this.prodId});
 }
 
 class ProductUpdated extends ProductState {
-  int update;
+  final int update;
   ProductUpdated({this.update});
 }
 

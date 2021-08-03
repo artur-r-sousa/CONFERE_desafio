@@ -27,6 +27,8 @@ dependencies:
   sqflite: ^1.3.0
   path_provider: ^2.0.2
   equatable: ^0.2.0
+  cached_network_image: 2.5.1
+  flutter_slidable: 0.5.7
 
 
 
@@ -46,6 +48,11 @@ flutter:
   assets:
     - info.json
     - defaultProd.png
+  fonts:
+    - family: BreeSerif
+      fonts:
+        - asset: fonts/BreeSerif-Regular.ttf
+
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
